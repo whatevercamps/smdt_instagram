@@ -12,7 +12,7 @@ let posts = [];
 if (args[0]) {
   fs.mkdir(args[0], () => {
     scraper.hashtagsScaper(hashtags, args[0]);
-    scraper.usersScraper(users, args[0], {
+    scraper.syncUsersScraper(users, args[0], {
       download: true,
       asyncDownload: 8,
     });

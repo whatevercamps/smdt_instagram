@@ -75,6 +75,61 @@ module.exports = function scraper() {
     });
   };
 
+  sc.syncUsersScraper = async (accounts, path, paramOptions) => {
+    let options = paramOptions ? { ...paramOptions } : { ...defaultOptions };
+
+    for (let i = 0; i < accounts.length; i++) {
+      let sleepTime = 10;
+      let accountFinish = false;
+      let tries = 0;
+      while (accountFinish === false && tries <= 10) {
+        const account = accounts[i];
+        console.log("trabajando", account);
+        try {
+          const userData = await it.user(account, { count: 0 });
+          try {
+            const data = await it.user(account, {
+              ...options,
+              filepath: `${path}/users/`,
+              count: options.count || userData.count,
+            });
+            fs.writeFile(
+              `${path}/users/${account}.json`,
+              JSON.stringify(data),
+              function (err) {
+                if (err) {
+                  console.log(err);
+                }
+                console.log("escrito", account);
+              }
+            );
+            accountFinish = true;
+          } catch (error) {
+            console.log("err raspando posts de", account, error);
+            console.log("durmiendo por", sleepTime, "segundos");
+            await new Promise((r) => setTimeout(r, sleepTime * 1000));
+            console.log("despertando");
+            tries++;
+            if (tries === 10) {
+              console.log("fallido, pasando al siguiente");
+            }
+            sleepTime += 10;
+          }
+        } catch (error) {
+          console.log("err raspando info base de", account, error);
+          console.log("durmiendo por", sleepTime, "segundos");
+          await new Promise((r) => setTimeout(r, sleepTime * 1000));
+          console.log("despertando");
+          tries++;
+          if (tries === 10) {
+            console.log("fallido, pasando al siguiente");
+          }
+          sleepTime += 10;
+        }
+      }
+    }
+  };
+
   sc.commentsScraper = (posts, path) => {
     posts.forEach((post) => {
       it.comments(post, { filetype: "csv", filepath: `${path}` })
