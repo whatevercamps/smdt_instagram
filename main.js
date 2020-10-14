@@ -6,7 +6,7 @@ const args = process.argv.slice(2);
 
 const hashtags = [];
 let users = require("./users.js");
-users = [users[1].replace("@", "")];
+users = users.map((user) => user.replace("@", ""));
 let posts = [];
 
 console.log("users", users);
