@@ -30,7 +30,24 @@ module.exports = function scraper() {
 
   sc.usersScraper = (accounts, path, paramOptions) => {
     let options = paramOptions ? { ...paramOptions } : { ...defaultOptions };
-
+    options["proxy"] = [
+      "161.202.226.194:80",
+      "169.57.1.84:8123",
+      "169.57.1.85:8123",
+      "169.57.1.84:80",
+      "169.57.1.84:25",
+      "72.249.76.221:3128",
+      "socks5://119.28.75.189:10800",
+      "3.92.176.124:80",
+      "18.141.212.115:80",
+      "51.81.82.175:80",
+      "52.149.152.236:80",
+      "5.189.133.231:80",
+      "socks5://163.172.101.112:1080",
+      "102.129.249.120:8080",
+      "102.129.249.120:3128",
+      "191.96.42.80:3128",
+    ];
     accounts.forEach((account) => {
       console.log("trabajando", account);
       it.user(account, { count: 0 })
