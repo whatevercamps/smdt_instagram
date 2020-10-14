@@ -32,26 +32,29 @@ module.exports = function scraper() {
     let options = paramOptions ? { ...paramOptions } : { ...defaultOptions };
 
     accounts.forEach((account) => {
-      it.user(account, { count: 0 }).then((counter) => {
-        it.user(account, {
-          ...options,
-          filepath: `${path}/users/`,
-          count: options.count || counter.count,
-        })
-          .then((res) => {
-            fs.writeFile(
-              `${path}/users/${account}.json`,
-              JSON.stringify(res),
-              function (err) {
-                if (err) return console.log(err);
-                console.log("terminado", account);
-              }
-            );
+      console.log("trabajando", account);
+      it.user(account, { count: 0 })
+        .then((counter) => {
+          it.user(account, {
+            ...options,
+            filepath: `${path}/users/`,
+            count: options.count || counter.count,
           })
-          .catch((err) => {
-            console.log("err", err);
-          });
-      });
+            .then((res) => {
+              fs.writeFile(
+                `${path}/users/${account}.json`,
+                JSON.stringify(res),
+                function (err) {
+                  if (err) return console.log(err);
+                  console.log("terminado", account);
+                }
+              );
+            })
+            .catch((err) => {
+              console.log("err raspando en", account, err);
+            });
+        })
+        .catch((err) => console.log("error datos en ", account, err));
     });
   };
 

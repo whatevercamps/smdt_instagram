@@ -9,8 +9,6 @@ let users = require("./users.js");
 users = users.map((user) => user.replace("@", ""));
 let posts = [];
 
-console.log("users", users);
-
 if (args[0]) {
   fs.mkdir(args[0], () => {
     scraper.hashtagsScaper(hashtags, args[0]);
